@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import request
+from flask import request, current_app
 from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api
 from flask import jsonify
@@ -60,6 +60,9 @@ class W2vWordEmbeddings(flair.embeddings.TokenEmbeddings):
 model = flair.models.SequenceTagger.load('diseases-best.pt')
 
 app = Flask(__name__)
+@app.route('/')
+def index_html():
+    return current_app.send_static_file('index.xhtml')
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 api = Api(app)

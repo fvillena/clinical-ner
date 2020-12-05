@@ -473,7 +473,7 @@ fieldset legend {
    user-select: none;
    cursor: default;
 }
-@font-face {
+/* @font-face {
   font-family: 'Liberation Sans';
   font-style: normal;
   font-weight: normal;
@@ -484,7 +484,7 @@ fieldset legend {
   font-style: normal;
   font-weight: normal;
   src: local('PT Sans Caption'), local('PTSans-Caption'), url('static/fonts/PT_Sans-Caption-Web-Regular.ttf') format('truetype');
-}
+} */
 
 /* Apple iPad, iPhone, iPod */
 

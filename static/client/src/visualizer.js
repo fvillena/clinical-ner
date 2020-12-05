@@ -3099,12 +3099,13 @@ Util.profileStart('before render');
           },
         };
         WebFont.load(webFontConfig);
-        setTimeout(function() {
-          if (!Visualizer.areFontsLoaded) {
-            console.error('Timeout in loading fonts');
-            proceedWithFonts();
-          }
-        }, fontLoadTimeout);
+        proceedWithFonts();
+        // setTimeout(function() {
+        //   if (!Visualizer.areFontsLoaded) {
+        //     console.error('Timeout in loading fonts');
+        //     proceedWithFonts();
+        //   }
+        // }, fontLoadTimeout);
       }
 
       dispatcher.
