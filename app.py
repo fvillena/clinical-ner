@@ -70,7 +70,7 @@ class ClinicalNer(Resource):
         content = request.get_json()
         result = clinicalner.annotate_text_as_dict(content["text"],model)
         return jsonify(result)
-api.add_resource(ClinicalNer, '/')
+api.add_resource(ClinicalNer, '/endpoint')
 
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5555)
