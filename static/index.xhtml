@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style-vis.css"/>
+    <script type="text/javascript" src="client/lib/head.load.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+            head.js(
+                // External libraries
+                'client/lib/jquery.min.js',
+                'client/lib/jquery.svg.min.js',
+                'client/lib/jquery.svgdom.min.js',
+
+                // brat helper modules
+                'client/src/configuration.js',
+                'client/src/util.js',
+                'client/src/annotation_log.js',
+                'client/lib/webfont.js',
+
+                // brat modules
+                '/client/src/dispatcher.js',
+                '/client/src/url_monitor.js',
+                '/client/src/visualizer.js'
+            );
+    </script>
+    
+</body>
+</html>
