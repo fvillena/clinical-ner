@@ -1,24 +1,23 @@
 
-head.js(
-    // External libraries
-    'static/client/lib/jquery.min.js',
-    'static/client/lib/jquery.svg.min.js',
-    'static/client/lib/jquery.svgdom.min.js',
+// head.js(
+//     // External libraries
+//     'static/client/lib/jquery.min.js',
+//     'static/client/lib/jquery.svg.min.js',
+//     'static/client/lib/jquery.svgdom.min.js',
 
-    // brat helper modules
-    'static/client/src/configuration.js',
-    'static/client/src/util.js',
-    'static/client/src/annotation_log.js',
-    'static/client/lib/webfont.js',
+//     // brat helper modules
+//     'static/client/src/configuration.js',
+//     'static/client/src/util.js',
+//     'static/client/src/annotation_log.js',
+//     'static/client/lib/webfont.js',
 
-    // brat modules
-    'static/client/src/dispatcher.js',
-    'static/client/src/url_monitor.js',
-    'static/client/src/visualizer.js'
-);
+//     // brat modules
+//     'static/client/src/dispatcher.js',
+//     'static/client/src/url_monitor.js',
+//     'static/client/src/visualizer.js'
+// );
 
-head.ready(function() {
-    
+$(document).ready(function() {    
     // var webFontURLs = [
     //     'fonts/Astloch-Bold.ttf',
     //     'fonts/PT_Sans-Caption-Web-Regular.ttf',
@@ -41,16 +40,16 @@ head.ready(function() {
     
     var docData = {
         "entities": [
-            [
-                "T1",
-                "Disease",
-                [
-                    [
-                        18,
-                        36
-                    ]
-                ]
-            ]
+            // [
+            //     "T1",
+            //     "Disease",
+            //     [
+            //         [
+            //             18,
+            //             36
+            //         ]
+            //     ]
+            // ]
         ],
         "labels": [
             "O",
@@ -61,7 +60,7 @@ head.ready(function() {
             "I-Disease"
         ],
         "tagged_string": "el paciente tiene cáncer <B-Disease> de <I-Disease> tiroides <I-Disease>",
-        "text": "el paciente tiene cáncer de tiroides",
+        "text": "",
         "tokens": [
             "el",
             "paciente",
@@ -84,12 +83,13 @@ head.ready(function() {
             contentType : 'application/json',
             type : 'POST',
         }).success(function (data) {
-            liveDispatcher.post("requestRenderData", [data])
+            $("brat_wrap").show();
+            liveDispatcher.post("requestRenderData", [data]);
         })
     }
     
-    $("#b").click(function () {
-        annotate($("#a").val())
+    $("#button").click(function () {
+        annotate($("#text").val())
     })
     
 });
