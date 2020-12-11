@@ -60,7 +60,7 @@ class W2vWordEmbeddings(flair.embeddings.TokenEmbeddings):
 model = flair.models.SequenceTagger.load('diseases-best.pt')
 
 app = Flask(__name__)
-@app.route('/')
+@app.route('/index.xhtml')
 def index_html():
     return current_app.send_static_file('index.xhtml')
 cors = CORS(app)
