@@ -15,18 +15,20 @@
       <h1>Detección Automática de Enfermedades en Textos Clínicos</h1>
         <hr></hr>
       <p>
-        El procesamiento del lenguaje natural es un campo de las ciencias de la computación, de la inteligencia artificial y de la lingüística que estudia las interacciones entre las computadoras y el lenguaje humano y una de sus aplicaciones es el <i>Named Entity Recognition</i> (NER; Reconocimiento de Entidades Nombradas), esta aplicación busca detectar y clasificar piezas de texto en clases determinadas de información.
+        El procesamiento del lenguaje natural es un campo de las ciencias de la computación, de la inteligencia artificial y de la lingüística que estudia las interacciones entre las computadoras y el lenguaje humano. Una de sus aplicaciones es el Named Entity Recognition (NER; Reconocimiento de Entidades Nombradas), que se emplea en la detección y clasificación de piezas de texto en clases determinadas de información.
       </p>
       <p>
-        En Medicina podemos adaptar el NER como un <i>Medical Entity Recognition</i> (Reconocimiento de Entidades Médicas) donde se extrae información desde un texto clínico redactado en un texto sin estructura. La información que pudiésemos extraer desde un texto clínico pueden ser enfermedades, procedimientos, partes del cuerpo, etc.
+        Una adaptación del NER en el campo de la medicina es el Medical Entity Recognition (Reconocimiento de Entidades Médicas) donde se extrae información médica desde texto clínico no estructurado. Enfermedades, procedimientos y partes del cuerpo, son algunos ejemplos de información relevante que se puede extraer desde un texto clínico.
       </p>
       <p>
-        Al poder detectar y clasificar pedazos de texto clínico hacia una entidad predeterminada podemos generar conclusiones desde recursos clínicos no estructurados para poder tomar decisiones o describir una realidad médica.
+        La detección y clasificación de pedazos de texto clínico en entidades predeterminadas permite explorar de forma eficiente el contenido de información clínica no estructurada para generar conclusiones, tomar decisiones o describir una realidad médica particular.
       </p>
       <p>
-        En esta demostración liberamos un detector automático de enfermedades en textos clínicos, en donde el usuario puede igresar un texto clínico no estructurado para poder ser analizado por nuestro modelo y enriquecer el texto al anotar sobre el mismo las piezas de texto en donde se encuentran mencionadas enfermedades.
+        En esta demostración liberamos un detector automático de enfermedades; el usuario puede ingresar un texto clínico no estructurado, un modelo desarrollado por nuestro grupo analiza y enriquece el texto ingresado y lo devuelve con las anotaciones de los fragmentos que corresponden a menciones de enfermedades.
       </p>
-
+      <div class="alert alert-warning" role="alert">
+        Este es un modelo predictivo en fase de desarrollo. Las respuestas retornadas por el modelo no deben ser utilizadas para la toma de decisiones.
+      </div>
       <div class="form-group">
         <label for="text">Texto a anotar</label>
         <textarea class="form-control" id="text" rows="3"></textarea>
