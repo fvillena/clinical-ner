@@ -78,12 +78,15 @@ $(document).ready(function() {
 
     
     function annotate(text) {
+        $("#spinner").show();
+        $("#button").addClass('disabled');
         $.ajax("https://pln.cmm.uchile.cl/clinical-ner/endpoint", {
             data : JSON.stringify({"text":text}),
             contentType : 'application/json',
             type : 'POST',
         }).success(function (data) {
-            $("brat_wrap").show();
+            $("#spinner").hide();
+            $("#button").removeClass('disabled');
             liveDispatcher.post("requestRenderData", [data]);
         })
     }
