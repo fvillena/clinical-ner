@@ -94,6 +94,12 @@ $(document).ready(function() {
     $("#button").click(function () {
         annotate($("#text").val())
     })
+    $("#example-medical").click(function () {
+        $("#text").val("HTA DM CA COLON OPERADO ANEMIA TROMBOSIS HPB MARCAPASOS ULTIMO CONTROL DE TELEMETRIA ABRIL15 HISTOGRAMA SIN EVENTOS MCP CON BUEN SENSADO Y CAPTURA, TVP VENA AXILAR IZQUIERDA EN TACO LE DETECTARON GLAUCOMA EN TTO")
+    })
+    $("#example-dental").click(function () {
+        $("#text").val("Se envía pieza 1.3 caries dentinaria penetrante, lesion apical compatible con granuloma periapical. Trepanada y eliminada la caries. Aun presenta remanete denario suficiente para rehabilitarlo y ser pilar de protesis.")
+    })
     
 });
 
