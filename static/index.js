@@ -80,7 +80,7 @@ $(document).ready(function() {
     function annotate(text) {
         $("#spinner").show();
         $("#button").addClass('disabled');
-        $.ajax("https://pln.cmm.uchile.cl/clinical-ner/endpoint", {
+        $.ajax("https://pln.cmm.uchile.cl/clinical-ner/diseases", {
             data : JSON.stringify({"text":text}),
             contentType : 'application/json',
             type : 'POST',
