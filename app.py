@@ -57,7 +57,8 @@ class W2vWordEmbeddings(flair.embeddings.TokenEmbeddings):
                 token.set_embedding(self.name, word_embedding)
         return sentences
 
-model = flair.models.SequenceTagger.load('diseases-best.pt')
+diseases_model = flair.models.SequenceTagger.load('diseases-best.pt')
+body_parts_model = flair.models.SequenceTagger.load('body_parts-best.pt')
 
 app = Flask(__name__)
 @app.route('/index.xhtml')
@@ -67,13 +68,21 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 api = Api(app)
 
-class ClinicalNer(Resource):
+class Diseases(Resource):
     @cross_origin()
     def post(self):
         content = request.get_json()
-        result = clinicalner.annotate_text_as_dict(content["text"],model)
+        result = clinicalner.annotate_text_as_dict(content["text"],diseases_model)
         return jsonify(result)
-api.add_resource(ClinicalNer, '/endpoint')
+api.add_resource(Diseases, '/diseases')
+
+class BodyParts(Resource):
+    @cross_origin()
+    def post(self):
+        content = request.get_json()
+        result = clinicalner.annotate_text_as_dict(content["text"],body_parts_model)
+        return jsonify(result)
+api.add_resource(BodyParts, '/body_parts')
 
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5555)
