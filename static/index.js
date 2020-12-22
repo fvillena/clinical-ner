@@ -84,6 +84,22 @@ $(document).ready(function() {
             contentType : 'application/json',
             type : 'POST',
         }).success(function (data) {
+            brat_data = {
+                text : data.text,
+                entities : brat_data.entities.concat(data.entities)
+            }
+
+            brat_data.entities.forEach(function(part, index) {
+                this.entities[index][0] = "T"+(index+1);
+              }, brat_data); // use arr as this
+              console.log(brat_data)
+
+            liveDispatcher.post("requestRenderData", [brat_data]);
+            $.ajax("https://pln.cmm.uchile.cl/clinical-ner/abbreviations", {
+            data : JSON.stringify({"text":text}),
+            contentType : 'application/json',
+            type : 'POST',
+        }).success(function (data) {
             $("#spinner").hide();
             $("#button").removeClass('disabled');
             brat_data = {
@@ -97,6 +113,7 @@ $(document).ready(function() {
               console.log(brat_data)
 
             liveDispatcher.post("requestRenderData", [brat_data]);
+        })
         })
         })
         

@@ -59,6 +59,7 @@ class W2vWordEmbeddings(flair.embeddings.TokenEmbeddings):
 
 diseases_model = flair.models.SequenceTagger.load('diseases-best.pt')
 body_parts_model = flair.models.SequenceTagger.load('body_parts-best.pt')
+abbreviations_model = flair.models.SequenceTagger.load('abbreviations-best.pt')
 
 app = Flask(__name__)
 @app.route('/index.xhtml')
@@ -83,6 +84,14 @@ class BodyParts(Resource):
         result = clinicalner.annotate_text_as_dict(content["text"],body_parts_model)
         return jsonify(result)
 api.add_resource(BodyParts, '/body_parts')
+
+class Abbreviations(Resource):
+    @cross_origin()
+    def post(self):
+        content = request.get_json()
+        result = clinicalner.annotate_text_as_dict(content["text"],abbreviations_model)
+        return jsonify(result)
+api.add_resource(Abbreviations, '/abbreviations')
 
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5555)
