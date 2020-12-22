@@ -30,7 +30,7 @@ $(document).ready(function() {
                 /* The labels are used when displaying the annotion, in this case
                     we also provide a short-hand "Per" for cases where
                     abbreviations are preferable */
-                labels : ['Disease', 'Dis'],
+                labels : ['Disease', 'D'],
                 // Blue is a nice colour for a person?
                 bgColor: '#7fa2ff',
                 // Use a slightly darker version of the bgColor for the border
@@ -46,7 +46,17 @@ $(document).ready(function() {
             bgColor: '#9CFFD9',
             // Use a slightly darker version of the bgColor for the border
             borderColor: 'darken'
-    }
+    },{
+        type   : 'Abbreviation',
+        /* The labels are used when displaying the annotion, in this case
+            we also provide a short-hand "Per" for cases where
+            abbreviations are preferable */
+        labels : ['Abbreviation', 'A'],
+        // Blue is a nice colour for a person?
+        bgColor: '#DAC4F7',
+        // Use a slightly darker version of the bgColor for the border
+        borderColor: 'darken'
+}
      ]
     };
     
