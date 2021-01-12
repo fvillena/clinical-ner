@@ -108,7 +108,6 @@ def get_sentence_entities(sentence):
 def tag_referrals(model_folder, referrals_folder, ann_folder):
     # Load models
     models = [flair.models.SequenceTagger.load(model_path) for model_path in glob.iglob(f'{model_folder}*.pt')]
-    print(f'El tiempo que tarda en cargar los modelos es: {time.time() - models_time} segundos.')
     # Annotate files
     for text_path in glob.iglob(f'{referrals_folder}*.txt'):
         filename = os.path.basename(text_path).split('.')[0]
