@@ -5,7 +5,9 @@ import gensim.models
 import re
 import numpy as np
 import torch
-
+import os 
+import glob 
+import codecs 
 
 class W2vWordEmbeddings(flair.embeddings.TokenEmbeddings):
     def __init__(self, embeddings):
@@ -101,3 +103,24 @@ def get_sentence_entities(sentence):
             [f"T{i + 1}", span.labels[0].value, [[span.start_pos, span.end_pos]]]
         )
     return entities
+
+
+def tag_referrals(model_folder, referrals_folder, ann_folder):
+    # Load models
+    models = [flair.models.SequenceTagger.load(model_path) for model_path in glob.iglob(f'{model_folder}*.pt')]
+    print(f'El tiempo que tarda en cargar los modelos es: {time.time() - models_time} segundos.')
+    # Annotate files
+    for text_path in glob.iglob(f'{referrals_folder}*.txt'):
+        filename = os.path.basename(text_path).split('.')[0]
+        text = codecs.open(text_path, 'r', 'utf-8').read()
+        ann = codecs.open(f'{ann_folder}{filename}.ann', 'w', 'utf-8')
+        for model in models:
+            result = annotate_text_as_dict(text, model)
+            for entity in result['entities']:
+                label_id = entity[0]
+                label_type = entity[1]
+                label_start_idx = entity[2][0][0]
+                label_end_idx = entity[2][0][1]
+                label_text = result['text'][label_start_idx:label_end_idx]
+                ann.write(f'{label_id} {label_type} {label_start_idx} {label_end_idx} {label_text} \n')
+        ann.close()
