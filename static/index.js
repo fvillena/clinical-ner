@@ -84,7 +84,7 @@ $(document).ready(function() {
             type : 'POST',
         }).success(function (data) {
             brat_data = {
-                text : data.text,
+                text : data.raw_text,
                 entities : data.entities
             }
             brat_data.entities.push(...data.entities)
@@ -95,7 +95,7 @@ $(document).ready(function() {
             type : 'POST',
         }).success(function (data) {
             brat_data = {
-                text : data.text,
+                text : data.raw_text,
                 entities : brat_data.entities.concat(data.entities)
             }
 
@@ -113,7 +113,7 @@ $(document).ready(function() {
             $("#spinner").hide();
             $("#button").removeClass('disabled');
             brat_data = {
-                text : data.text,
+                text : data.raw_text,
                 entities : brat_data.entities.concat(data.entities)
             }
 
