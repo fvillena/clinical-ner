@@ -55,6 +55,15 @@ class W2vWordEmbeddings(flair.embeddings.TokenEmbeddings):
                 token.set_embedding(self.name, word_embedding)
         return sentences
 
+def normalizer(text): #normalizes a given string to lowercase and changes all vowels to their base form
+    text = text.lower() #string lowering
+    text = re.sub('á', 'a', text) #replaces special vowels to their base forms
+    text = re.sub('é', 'e', text)
+    text = re.sub('í', 'i', text)
+    text = re.sub('ó', 'o', text)
+    text = re.sub('ú', 'u', text)
+    return text
+
 def get_token_label(token):
     return token.get_labels("ner")[0].value
 
@@ -80,14 +89,16 @@ def get_sentence_tokens(sentence):
 
 
 def annotate_text_as_dict(text, model):
-    sentence = annotate_text(text, model)
+    normalized_text = normalizer(text)
+    sentence = annotate_text(normalized_text, model)
     raw_text = sentence.to_original_text()
     tokens = get_sentence_tokens(sentence)
     labels = get_sentence_labels(sentence)
     entities = get_sentence_entities(sentence)
     tagged_string = sentence.to_tagged_string()
     response = {
-        "text": raw_text,
+        "raw_text": text,
+        "normalized_text": normalized_text,
         "tokens": tokens,
         "labels": labels,
         "entities": entities,
