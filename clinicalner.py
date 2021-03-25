@@ -70,7 +70,7 @@ def get_token_label(token):
 
 def annotate_text(text, model):
     sentence = flair.data.Sentence(text)
-    model.predict(sentence)
+    model.predict(sentence, all_tag_prob=True)
     return sentence
 
 
@@ -87,6 +87,12 @@ def get_sentence_tokens(sentence):
         tokens.append(token.text)
     return tokens
 
+def get_sentence_token_probs(sentence):
+    probs = []
+    for token in sentence.tokens:
+        probs.append(token.tags_proba_dist)
+    return probs
+
 
 def annotate_text_as_dict(text, model):
     normalized_text = normalizer(text)
@@ -96,6 +102,7 @@ def annotate_text_as_dict(text, model):
     labels = get_sentence_labels(sentence)
     entities = get_sentence_entities(sentence)
     tagged_string = sentence.to_tagged_string()
+    probs = get_sentence_token_probs(sentence)
     response = {
         "raw_text": text,
         "normalized_text": normalized_text,
@@ -103,6 +110,7 @@ def annotate_text_as_dict(text, model):
         "labels": labels,
         "entities": entities,
         "tagged_string": tagged_string,
+        "probabilities": probs
     }
     return response
 

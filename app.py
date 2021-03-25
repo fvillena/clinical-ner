@@ -10,6 +10,14 @@ import re
 import numpy as np
 import torch
 import clinicalner
+import json
+
+class MyEncoder(json.JSONEncoder):
+    def default(self, obj): # pylint: disable=E0202
+        if isinstance(obj, flair.data.Label):
+            return str(obj)
+        else:
+            return super(MyEncoder, self).default(obj)
 
 class W2vWordEmbeddings(flair.embeddings.TokenEmbeddings):
     def __init__(self, embeddings):
@@ -63,6 +71,7 @@ abbreviations_model = flair.models.SequenceTagger.load('abbreviations-best.pt')
 neoplasm_morphologies_model = flair.models.SequenceTagger.load('neoplasm_morphologies-best.pt')
 
 app = Flask(__name__)
+app.json_encoder = MyEncoder
 @app.route('/index.xhtml')
 def index_html():
     return current_app.send_static_file('index.xhtml')
