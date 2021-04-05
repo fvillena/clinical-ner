@@ -11,6 +11,7 @@ import numpy as np
 import torch
 import clinicalner
 import json
+import os
 
 class MyEncoder(json.JSONEncoder):
     def default(self, obj): # pylint: disable=E0202
@@ -65,10 +66,16 @@ class W2vWordEmbeddings(flair.embeddings.TokenEmbeddings):
                 token.set_embedding(self.name, word_embedding)
         return sentences
 
-diseases_model = flair.models.SequenceTagger.load('diseases-best.pt')
-body_parts_model = flair.models.SequenceTagger.load('body_parts-best.pt')
-abbreviations_model = flair.models.SequenceTagger.load('abbreviations-best.pt')
-neoplasm_morphologies_model = flair.models.SequenceTagger.load('neoplasm_morphologies-best.pt')
+def load_model(model_location):
+    if os.path.exists(model_location):
+        return flair.models.SequenceTagger.load(model_location)
+    else:
+        return None
+
+diseases_model = load_model('diseases-best.pt')
+body_parts_model = load_model('body_parts-best.pt')
+abbreviations_model = load_model('abbreviations-best.pt')
+neoplasm_morphologies_model = load_model('neoplasm_morphologies-best.pt')
 
 app = Flask(__name__)
 app.json_encoder = MyEncoder
@@ -79,37 +86,41 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 api = Api(app)
 
-class Diseases(Resource):
-    @cross_origin()
-    def post(self):
-        content = request.get_json()
-        result = clinicalner.annotate_text_as_dict(content["text"],diseases_model)
-        return jsonify(result)
-api.add_resource(Diseases, '/diseases')
+if diseases_model != None:
+    class Diseases(Resource):
+        @cross_origin()
+        def post(self):
+            content = request.get_json()
+            result = clinicalner.annotate_text_as_dict(content["text"],diseases_model)
+            return jsonify(result)
+    api.add_resource(Diseases, '/diseases')
 
-class BodyParts(Resource):
-    @cross_origin()
-    def post(self):
-        content = request.get_json()
-        result = clinicalner.annotate_text_as_dict(content["text"],body_parts_model)
-        return jsonify(result)
-api.add_resource(BodyParts, '/body_parts')
+if body_parts_model != None:
+    class BodyParts(Resource):
+        @cross_origin()
+        def post(self):
+            content = request.get_json()
+            result = clinicalner.annotate_text_as_dict(content["text"],body_parts_model)
+            return jsonify(result)
+    api.add_resource(BodyParts, '/body_parts')
 
-class Abbreviations(Resource):
-    @cross_origin()
-    def post(self):
-        content = request.get_json()
-        result = clinicalner.annotate_text_as_dict(content["text"],abbreviations_model)
-        return jsonify(result)
-api.add_resource(Abbreviations, '/abbreviations')
+if abbreviations_model != None:
+    class Abbreviations(Resource):
+        @cross_origin()
+        def post(self):
+            content = request.get_json()
+            result = clinicalner.annotate_text_as_dict(content["text"],abbreviations_model)
+            return jsonify(result)
+    api.add_resource(Abbreviations, '/abbreviations')
 
-class NeoplasmMorphologies(Resource):
-    @cross_origin()
-    def post(self):
-        content = request.get_json()
-        result = clinicalner.annotate_text_as_dict(content["text"],neoplasm_morphologies_model)
-        return jsonify(result)
-api.add_resource(NeoplasmMorphologies, '/neoplasm_morphologies')
+if neoplasm_morphologies_model != None:
+    class NeoplasmMorphologies(Resource):
+        @cross_origin()
+        def post(self):
+            content = request.get_json()
+            result = clinicalner.annotate_text_as_dict(content["text"],neoplasm_morphologies_model)
+            return jsonify(result)
+    api.add_resource(NeoplasmMorphologies, '/neoplasm_morphologies')
 
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5555)
