@@ -12,6 +12,7 @@ import torch
 import clinicalner
 import json
 import os
+import torch
 
 class MyEncoder(json.JSONEncoder):
     def default(self, obj): # pylint: disable=E0202
@@ -66,6 +67,13 @@ class W2vWordEmbeddings(flair.embeddings.TokenEmbeddings):
                 token.set_embedding(self.name, word_embedding)
         return sentences
 
+available_gpu = torch.cuda.is_available()
+if available_gpu:
+    print(f"GPU is available: {torch.cuda.get_device_name(0)}")
+    flair.device = torch.device('cuda')
+else:
+    flair.device = torch.device('cpu')
+
 def load_model(model_location):
     if os.path.exists(model_location):
         return flair.models.SequenceTagger.load(model_location)
@@ -119,7 +127,10 @@ if neoplasm_morphologies_model != None:
         @cross_origin()
         def post(self):
             content = request.get_json()
-            result = clinicalner.annotate_text_as_dict(content["text"],neoplasm_morphologies_model)
+            if "texts" in content:
+                result = clinicalner.annotate_texts_as_dict(content["texts"],neoplasm_morphologies_model)
+            else:
+                result = clinicalner.annotate_text_as_dict(content["text"],neoplasm_morphologies_model)
             return jsonify(result)
     api.add_resource(NeoplasmMorphologies, '/neoplasm_morphologies')
 
@@ -128,7 +139,10 @@ if neoplasm_topographies_model != None:
         @cross_origin()
         def post(self):
             content = request.get_json()
-            result = clinicalner.annotate_text_as_dict(content["text"],neoplasm_topographies_model)
+            if "texts" in content:
+                result = clinicalner.annotate_texts_as_dict(content["texts"],neoplasm_topographies_model)
+            else:
+                result = clinicalner.annotate_text_as_dict(content["text"],neoplasm_topographies_model)
             return jsonify(result)
     api.add_resource(NeoplasmTopographies, '/neoplasm_topographies')
 
