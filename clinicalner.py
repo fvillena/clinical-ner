@@ -7,7 +7,7 @@ import numpy as np
 import torch
 import os 
 import glob 
-import codecs 
+import codecs
 
 class W2vWordEmbeddings(flair.embeddings.TokenEmbeddings):
     def __init__(self, embeddings):
@@ -73,6 +73,11 @@ def annotate_text(text, model):
     model.predict(sentence, all_tag_prob=True)
     return sentence
 
+def annotate_texts(texts, model):
+    sentences = [flair.data.Sentence(text) for text in texts]
+    model.predict(sentences, all_tag_prob=True, mini_batch_size=32)
+    return sentences
+
 
 def get_sentence_labels(sentence):
     labels = []
@@ -93,10 +98,7 @@ def get_sentence_token_probs(sentence):
         probs.append(token.tags_proba_dist)
     return probs
 
-
-def annotate_text_as_dict(text, model):
-    normalized_text = normalizer(text)
-    sentence = annotate_text(normalized_text, model)
+def get_sentence_as_dict(sentence, text, normalized_text):
     raw_text = sentence.to_original_text()
     tokens = get_sentence_tokens(sentence)
     labels = get_sentence_labels(sentence)
@@ -114,6 +116,17 @@ def annotate_text_as_dict(text, model):
     }
     return response
 
+def annotate_text_as_dict(text, model):
+    normalized_text = normalizer(text)
+    sentence = annotate_text(normalized_text, model)
+    response = get_sentence_as_dict(sentence, text, normalized_text)
+    return response
+
+def annotate_texts_as_dict(texts, model):
+    normalized_texts = [normalizer(text) for text in texts]
+    sentences = annotate_texts(normalized_texts, model)
+    responses = [get_sentence_as_dict(sentence, text, normalized_text) for sentence, text, normalized_text in zip(sentences, texts, normalized_texts)]
+    return responses
 
 def get_sentence_entities(sentence):
     entities = []
