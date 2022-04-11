@@ -85,6 +85,7 @@ body_parts_model = load_model('body_parts-best.pt')
 abbreviations_model = load_model('abbreviations-best.pt')
 neoplasm_morphologies_model = load_model('neoplasm_morphologies-best.pt')
 neoplasm_topographies_model = load_model('neoplasm_topographies-best.pt')
+medications_model = load_model('medications-best.pt')
 
 app = Flask(__name__)
 app.json_encoder = MyEncoder
@@ -133,6 +134,18 @@ if neoplasm_morphologies_model != None:
                 result = clinicalner.annotate_text_as_dict(content["text"],neoplasm_morphologies_model)
             return jsonify(result)
     api.add_resource(NeoplasmMorphologies, '/neoplasm_morphologies')
+
+if medications_model != None:
+    class Medications(Resource):
+        @cross_origin()
+        def post(self):
+            content = request.get_json()
+            if "texts" in content:
+                result = clinicalner.annotate_texts_as_dict(content["texts"],medications_model)
+            else:
+                result = clinicalner.annotate_text_as_dict(content["text"],medications_model)
+            return jsonify(result)
+    api.add_resource(Medications, '/medication')
 
 if neoplasm_topographies_model != None:
     class NeoplasmTopographies(Resource):
