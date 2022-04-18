@@ -145,7 +145,7 @@ if medications_model != None:
             else:
                 result = clinicalner.annotate_text_as_dict(content["text"],medications_model)
             return jsonify(result)
-    api.add_resource(Medications, '/medication')
+    api.add_resource(Medications, '/medications')
 
 if neoplasm_topographies_model != None:
     class NeoplasmTopographies(Resource):
