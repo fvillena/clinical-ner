@@ -86,6 +86,7 @@ abbreviations_model = load_model('abbreviations-best.pt')
 neoplasm_morphologies_model = load_model('neoplasm_morphologies-best.pt')
 neoplasm_topographies_model = load_model('neoplasm_topographies-best.pt')
 medications_model = load_model('medications-best.pt')
+metastasis_model = load_model('metastasis-best.pt')
 
 app = Flask(__name__)
 app.json_encoder = MyEncoder
@@ -158,6 +159,18 @@ if neoplasm_topographies_model != None:
                 result = clinicalner.annotate_text_as_dict(content["text"],neoplasm_topographies_model)
             return jsonify(result)
     api.add_resource(NeoplasmTopographies, '/neoplasm_topographies')
+
+if metastasis_model != None:
+    class Metastasis(Resource):
+        @cross_origin()
+        def post(self):
+            content = request.get_json()
+            if "texts" in content:
+                result = clinicalner.annotate_texts_as_dict(content["texts"],metastasis_model)
+            else:
+                result = clinicalner.annotate_text_as_dict(content["text"],metastasis_model)
+            return jsonify(result)
+    api.add_resource(Metastasis, '/metastasis')
 
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5555)
