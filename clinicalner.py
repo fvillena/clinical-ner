@@ -65,17 +65,18 @@ def normalizer(text): #normalizes a given string to lowercase and changes all vo
     return text
 
 def get_token_label(token):
-    return token.get_labels("ner")[0].value
+    label = sorted(token.get_tags_proba_dist("ner"), key=lambda a: a.score, reverse=True)[0].value
+    return label
 
 
 def annotate_text(text, model):
     sentence = flair.data.Sentence(text)
-    model.predict(sentence, all_tag_prob=True)
+    model.predict(sentence, return_probabilities_for_all_classes=True)
     return sentence
 
 def annotate_texts(texts, model):
     sentences = [flair.data.Sentence(text) for text in texts]
-    model.predict(sentences, all_tag_prob=True, mini_batch_size=32)
+    model.predict(sentences, return_probabilities_for_all_classes=True, mini_batch_size=32)
     return sentences
 
 
@@ -130,9 +131,9 @@ def annotate_texts_as_dict(texts, model):
 
 def get_sentence_entities(sentence):
     entities = []
-    for i, span in enumerate(sentence.get_spans()):
+    for i, span in enumerate(sentence.get_spans("ner")):
         entities.append(
-            [f"T{i + 1}", span.labels[0].value, [[span.start_pos, span.end_pos]]]
+            [f"T{i + 1}", span.labels[0].value, [[span.start_position, span.end_position]]]
         )
     return entities
 
