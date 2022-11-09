@@ -101,7 +101,10 @@ if diseases_model != None:
         @cross_origin()
         def post(self):
             content = request.get_json()
-            result = clinicalner.annotate_text_as_dict(content["text"],diseases_model)
+            if "texts" in content:
+                result = clinicalner.annotate_texts_as_dict(content["texts"],diseases_model)
+            else:
+                result = clinicalner.annotate_text_as_dict(content["text"],diseases_model)
             return jsonify(result)
     api.add_resource(Diseases, '/diseases')
 

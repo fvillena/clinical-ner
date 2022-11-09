@@ -133,7 +133,7 @@ def get_sentence_entities(sentence):
     entities = []
     for i, span in enumerate(sentence.get_spans("ner")):
         entities.append(
-            [f"T{i + 1}", span.labels[0].value, [[span.start_position, span.end_position]]]
+            [f"T{i + 1}", span.labels[0].value, [[span.start_position, span.end_position]], span.text]
         )
     return entities
 
