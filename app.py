@@ -21,51 +21,12 @@ class MyEncoder(json.JSONEncoder):
         else:
             return super(MyEncoder, self).default(obj)
 
-class W2vWordEmbeddings(flair.embeddings.TokenEmbeddings):
-    def __init__(self, embeddings):
-        self.name = embeddings
-        self.static_embeddings = False
-        self.precomputed_word_embeddings = (
-            gensim.models.KeyedVectors.load_word2vec_format(
-                embeddings, binary=False, limit=100000
-            )
-        )
-        self.__embedding_length = self.precomputed_word_embeddings.vector_size
-        super().__init__()
 
-    @property
-    def embedding_length(self):
-        return self.__embedding_length
-
-    def _add_embeddings_internal(self, sentences):
-        for _, sentence in enumerate(sentences):
-            for token, _ in zip(sentence.tokens, range(len(sentence.tokens))):
-                token = token
-                if token.text in self.precomputed_word_embeddings:
-                    word_embedding = self.precomputed_word_embeddings[token.text]
-                elif token.text.lower() in self.precomputed_word_embeddings:
-                    word_embedding = self.precomputed_word_embeddings[
-                        token.text.lower()
-                    ]
-                elif (
-                    re.sub(r"\d", "#", token.text.lower())
-                    in self.precomputed_word_embeddings
-                ):
-                    word_embedding = self.precomputed_word_embeddings[
-                        re.sub(r"\d", "#", token.text.lower())
-                    ]
-                elif (
-                    re.sub(r"\d", "0", token.text.lower())
-                    in self.precomputed_word_embeddings
-                ):
-                    word_embedding = self.precomputed_word_embeddings[
-                        re.sub(r"\d", "0", token.text.lower())
-                    ]
-                else:
-                    word_embedding = np.zeros(self.embedding_length, dtype="float")
-                word_embedding = torch.FloatTensor(word_embedding) # pylint: disable=no-member
-                token.set_embedding(self.name, word_embedding)
-        return sentences
+W2vWordEmbeddings = type(
+    "W2vWordEmbeddings",
+    clinicalner.W2vWordEmbeddings.__bases__,
+    dict(clinicalner.W2vWordEmbeddings.__dict__),
+)
 
 available_gpu = torch.cuda.is_available()
 if available_gpu:
@@ -80,12 +41,12 @@ def load_model(model_location):
     else:
         return None
 
-diseases_model = load_model('diseases-best.pt')
-body_parts_model = load_model('body_parts-best.pt')
-abbreviations_model = load_model('abbreviations-best.pt')
-neoplasm_morphologies_model = load_model('neoplasm_morphologies-best.pt')
-neoplasm_topographies_model = load_model('neoplasm_topographies-best.pt')
-medications_model = load_model('medications-best.pt')
+diseases_model = load_model('models/diseases-best.pt')
+body_parts_model = load_model('models/body_parts-best.pt')
+abbreviations_model = load_model('models/abbreviations-best.pt')
+neoplasm_morphologies_model = load_model('models/neoplasm_morphologies-best.pt')
+neoplasm_topographies_model = load_model('models/neoplasm_topographies-best.pt')
+medications_model = load_model('models/medications-best.pt')
 
 app = Flask(__name__)
 app.json_encoder = MyEncoder
